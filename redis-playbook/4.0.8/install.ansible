@@ -1,0 +1,35 @@
+- name: install redis
+  hosts: redis
+  user: root
+  vars:
+    path: /var/tmp/wise2c/redis
+  tasks:
+  - name: make redis dir
+    file:
+      path: '{{ item }}'
+      state: directory
+      mode: 0755
+    with_items:
+      - '{{ path }}'
+
+  - name: copy redis image
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: 'file/redis.tar.bz2', dest: '{{ path }}' }
+
+  - name: load redis image
+    docker_image:
+      load_path: '{{ path }}/redis.tar.bz2'
+      name: '{{ image }}'
+      timeout: 600
+
+  - name: run redis
+    docker_container:
+      name: redis
+      image: '{{ image }}'
+      command: '{{ command }}'
+      volumes:
+      - /data/lib/wise2c/redis:/data
+      ports: '{{ ports }}'

@@ -1,0 +1,18 @@
+[
+    {
+        "variable": "self",
+        "label": "redis hosts",
+        "description": "hosts for setup redis",
+        "type": "host",
+        "default": "",
+        "required": true
+    },
+    {
+        "variable": "port",
+        "label": "redis port",
+        "description": "access redis with the port",
+        "type": "string",
+        "default": "6379",
+        "required": true
+    }
+]

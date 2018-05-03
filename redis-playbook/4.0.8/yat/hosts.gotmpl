@@ -1,0 +1,4 @@
+[redis]
+{{ range $v := .redis.Hosts.self -}}
+{{ $v.IP }}
+{{ end }}

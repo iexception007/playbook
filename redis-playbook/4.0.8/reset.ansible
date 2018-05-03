@@ -1,0 +1,15 @@
+- name: clean redis
+  hosts: redis
+  user: root
+  tasks:
+  - name: stop & rm old redis container
+    docker_container:
+      name: redis
+      state: absent
+        
+  - name: clean redis directory
+    file:
+      path: '{{ item }}'
+      state: absent
+    with_items:
+    - /data/lib/wise2c/redis

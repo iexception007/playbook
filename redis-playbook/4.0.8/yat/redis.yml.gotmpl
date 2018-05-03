@@ -1,0 +1,5 @@
+command:
+- redis-server
+- --appendonly yes
+ports:
+- {{ redis.Property.port }}:6379
