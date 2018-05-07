@@ -3,14 +3,18 @@
   user: root
   vars:
     path: /var/tmp/wise2c/redis
+    cfg_path: /data/lib/wise2c/redis/conf
+    data_path: /data/lib/wise2c/redis/data
   tasks:
-  - name: make redis dir
+  - name: make redis dir     
     file:
       path: '{{ item }}'
       state: directory
       mode: 0755
     with_items:
       - '{{ path }}'
+      - '{{ cfg_path }}'
+      - '{{ data_path }}'
 
   - name: copy redis image
     copy:
@@ -18,6 +22,7 @@
       dest: '{{ item.dest }}'
     with_items:
       - { src: 'file/redis.tar.bz2', dest: '{{ path }}' }
+      - { src: 'file/redis.conf',    dest: '{{ cfg_path }}' }
 
   - name: load redis image
     docker_image:
@@ -25,11 +30,15 @@
       name: '{{ image }}'
       timeout: 600
 
+  - name: reconfig the config file
+    command: sed -i "s/appendonly no/appendonly yes/g" {{ cfg_path }}/redis.conf 
+
   - name: run redis
     docker_container:
       name: redis
       image: '{{ image }}'
       command: '{{ command }}'
       volumes:
-      - /data/lib/wise2c/redis:/data
+      - /data/lib/wise2c/redis/data:/data
+      - /data/lib/wise2c/redis/conf:/usr/local/etc/redis/redis.conf
       ports: '{{ ports }}'
