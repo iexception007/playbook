@@ -2,7 +2,7 @@ command:
 - redis-server 
 - /usr/local/etc/redis/redis.conf
 ports:
-- {{ redis.Property.port }}:6379
+- {{ .redis.Property.port }}:6379
 memory: 1024m
 cpu_period: 1000000
 cpu_quota: 500000

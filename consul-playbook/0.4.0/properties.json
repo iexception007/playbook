@@ -14,5 +14,13 @@
         "type": "host",
         "default": "",
         "required": true
+    },
+    {
+        "variable": "port",
+        "label": "consul port",
+        "description": "access the consul ui with this port",
+        "type": "string",
+        "default": "8500",
+        "required": true
     }
 ]
