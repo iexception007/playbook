@@ -1,0 +1,9 @@
+[consul-master]
+{{ range $v := .consul.Hosts.master -}}
+{{ $v.IP }} role=master
+{{ end }}
+
+[consul-slave]
+{{ range $v := .consul.Hosts.slave -}}
+{{ $v.IP }} role=slave
+{{ end }}

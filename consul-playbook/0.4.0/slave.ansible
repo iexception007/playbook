@@ -1,0 +1,24 @@
+  - name: run slave consul
+    docker_container:
+      name: consul-slave
+      image: progrium/consul:latest            
+      command: 
+      - -server
+      - -bootstrap-expect 3
+      - -ui-dir /ui
+      - -node=node{% for host in groups['consul-slave'] %}{% if host == inventory_hostname %}{{ loop.index+1 }}{% endif %}{% endfor %}
+      - -advertise {{ inventory_hostname }}
+      - -join {% for host in groups['consul-master'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}
+      volumes:
+      - /data/lib/wise2c/consul:/data
+      ports:
+      - "8300:8300"
+      - "8301:8301"
+      - "8301:8301/udp"
+      - "8302:8302"
+      - "8302:8302/udp"
+      - "8400:8400"
+      - "8500:8500"      
+      memory: 1024m
+      cpu_period: 1000000
+      cpu_quota: 500000

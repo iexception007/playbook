@@ -1,0 +1,18 @@
+[
+    {
+        "variable": "master",
+        "label": "master consul host",
+        "description": "host for setup master consul",
+        "type": "host",
+        "default": "",
+        "required": true
+    },
+    {
+        "variable": "slave",
+        "label": "slave consul hosts",
+        "description": "hosts for setup slave consul",
+        "type": "host",
+        "default": "",
+        "required": true
+    }
+]

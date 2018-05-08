@@ -1,0 +1,39 @@
+- name: install slave consul
+  hosts: all
+  user: root
+  vars:
+    path: /var/tmp/wise2c/consul
+    data_path: /data/lib/wise2c/consul
+    image: progrium/consul:latest
+  tasks:
+  - name: make consul dir
+    file:
+      path: '{{ item }}'
+      state: directory
+      mode: 0755
+    with_items:
+      - '{{ path }}'
+      - '{{ data_path}}'
+
+  - name: copy consul image
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: 'file/consul.tar.bz2', dest: '{{ path }}' } 
+
+  - name: load consul image
+    docker_image:
+      load_path: '{{ path }}/consul.tar.bz2'
+      name: '{{ image }}'
+      timeout: 600
+
+  - name: setup master
+    include_tasks: master.ansible
+    when: "'consul-master' in group_names"
+#    when: inventory_hostname in groups['consul-master']
+
+  - name: setup slave
+    include_tasks: slave.ansible
+    when: "'consul-slave' in group_names"
+#    when: inventory_hostname in group['consul-slave']
