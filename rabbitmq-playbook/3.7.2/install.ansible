@@ -1,0 +1,55 @@
+- name: install rabbitmq cluster
+  hosts: rabbitmq
+  user: root
+  vars:
+    path: /var/tmp/wise2c/rabbitmq
+    data_path: /data/lib/wise2c/rabbitmq
+    image: rabbitmq:3.7.2-management
+  tasks:
+  - name: make rabbitmq dir
+    file:
+      path: '{{ item }}'
+      state: directory
+      mode: 0755
+    with_items:
+      - '{{ path }}'
+      - '{{ data_path}}'
+
+  - name: copy rabbitmq image
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: 'file/rabbitmq.tar.bz2', dest: '{{ path }}' } 
+
+  - name: load rabbitmq image
+    docker_image:
+      load_path: '{{ path }}/rabbitmq.tar.bz2'
+      name: '{{ image }}'
+      timeout: 600
+
+  - name: generate the config
+    template:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+    - { src: 'template/rabbitmq.conf.j2', dest: '{{ data_path }}/rabbitmq.conf' }
+
+  - name: run rabbitmq container
+    docker_container:
+      name: rabbitmq
+      image: '{{ image }}'            
+      volumes:
+      - /etc/hosts:/etc/hosts 
+      - /data/lib/wise2c/rabbitmq/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf
+      env:
+        RABBITMQ_ERLANG_COOKIE: "LfSlzQHvlvQGZqpbM46DAg=="
+        RABBITMQ_NODENAME: "rabbit@{{ ansible_hostname }}"
+      network_mode: host  
+      # ports:
+      # - "5672:5672"
+      # - "{{ ui_port }}:15672"
+      #memory: 1024m
+      #cpu_period: 1000000
+      #cpu_quota: 500000
+      

@@ -1,0 +1,4 @@
+[rabbitmq]
+{{ range $v := .rabbitmq.Hosts.self -}}
+{{ $v.IP }}
+{{ end }}

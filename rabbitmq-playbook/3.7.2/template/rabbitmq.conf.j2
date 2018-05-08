@@ -1,0 +1,18 @@
+listeners.tcp.default = 5672
+hipe_compile = false
+management.listener.port = 15672
+management.listener.ssl = false
+
+default_user = wise2c
+default_pass = wise2c
+
+mnesia_table_loading_retry_timeout = 700000
+mnesia_table_loading_retry_limit   = 30
+
+cluster_formation.peer_discovery_backend = rabbit_peer_discovery_classic_config
+
+{% for host in groups['rabbitmq'] %}
+cluster_formation.classic_config.nodes.{{ loop.index }} = rabbit@{{ hostvars[host].ansible_hostname }}
+{% endfor %}
+
+cluster_partition_handling = autoheal

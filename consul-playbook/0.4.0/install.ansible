@@ -1,4 +1,4 @@
-- name: install slave consul
+- name: install consul cluster
   hosts: all
   user: root
   vars:
