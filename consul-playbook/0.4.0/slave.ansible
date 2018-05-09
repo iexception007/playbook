@@ -8,7 +8,7 @@
       - -ui-dir /ui
       - -node=node{% for host in groups['consul-slave'] %}{% if host == inventory_hostname %}{{ loop.index+1 }}{% endif %}{% endfor %}
       - -advertise {{ inventory_hostname }}
-      - -join {% for host in groups['consul-master'] %}{{ hostvars[host]['ansible_eth0']['ipv4']['address'] }}{% endfor %}
+      - -join {% for host in groups['consul-master'] %}{{ host }}{% endfor %}
       volumes:
       - /data/lib/wise2c/consul:/data
       ports:

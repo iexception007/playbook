@@ -11,7 +11,7 @@
         "variable": "port",
         "label": "redis port",
         "description": "access redis with the port",
-        "type": "string",
+        "type": "int",
         "default": "6379",
         "required": true
     }

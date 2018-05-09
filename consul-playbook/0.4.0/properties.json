@@ -19,7 +19,7 @@
         "variable": "port",
         "label": "consul port",
         "description": "access the consul ui with this port",
-        "type": "string",
+        "type": "int",
         "default": "8500",
         "required": true
     }
