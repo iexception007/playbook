@@ -1,0 +1,16 @@
+- name: clean rabbitmq
+  hosts: all
+  user: root
+  tasks:
+  - name: stop & rm old rabbitmq container
+    docker_container:
+      name: rabbitmq
+      state: absent
+
+  - name: clean rabbitmq directory
+    file:
+      path: '{{ item }}'
+      state: absent
+    with_items:
+    - /data/lib/wise2c/rabbitmq   
+

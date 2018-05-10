@@ -1,0 +1,28 @@
+- name: run rabbitmq container
+  docker_container:
+    name: rabbitmq
+    image: '{{ image }}'            
+    volumes:
+    - '{{ data_path }}:/var/lib/rabbitmq'
+    env:
+      RABBITMQ_DEFAULT_USER: "wise2c"
+      RABBITMQ_DEFAULT_PASS: "wise2c"
+      RABBITMQ_NODENAME: "rabbit@{{ ansible_hostname }}"
+      RABBITMQ_ERLANG_COOKIE: "I7AZyP8KGMuDLnRgS7ntr5EFZhkOPOngyLnmynICLiQ"        
+    network_mode: host  
+
+- name: add the cluster
+  shell: |
+    sleep 7
+    docker exec rabbitmq rabbitmqctl stop_app
+    docker exec rabbitmq rabbitmqctl join_cluster rabbit@dev-1
+    docker exec rabbitmq rabbitmqctl start_app
+  when: "'rabbitmq-slave' in group_names"
+
+- name: check the cluster status
+  script: scripts/check_rabbitmq.sh 0
+  register: check_output
+
+- name: set rabbitmq mirror function
+  script: scripts/mirror_rabbitmq.sh
+  when: check_output.stdout == 'true' and cluster_mirror

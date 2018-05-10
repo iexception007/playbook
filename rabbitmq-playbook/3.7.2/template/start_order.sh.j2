@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+{% for host in groups['rabbitmq'] %}
+    {% if host == inventory_hostname %}
+        sleep {{ loop.index0 * 2 }}
+    {% endif %}
+{% endfor %}

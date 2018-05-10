@@ -1,0 +1,26 @@
+[
+    {
+        "variable": "master",
+        "label": "master rabbitmq hosts",
+        "description": "hosts for setup master rabbitmq",
+        "type": "host",
+        "default": "",
+        "required": true
+    },
+    {
+        "variable": "slave",
+        "label": "slave rabbitmq hosts",
+        "description": "hosts for setup master rabbitmq",
+        "type": "host",
+        "default": "",
+        "required": true
+    },    
+    {
+        "variable": "cluster_mirror",
+        "label": "rabbitmq cluster mirror",
+        "description": "rabbitmq cluster mirror function",
+        "type": "bool",
+        "default": true,
+        "required": true
+    }
+]

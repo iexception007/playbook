@@ -1,4 +1,7 @@
-[rabbitmq]
+[rabbitmq-master]
 192.168.1.8
+
+
+[rabbitmq-slave]
 192.168.1.13
 192.168.1.3

@@ -1,4 +1,5 @@
 [rabbitmq]
-{{ range $v := .rabbitmq.Hosts.self -}}
-{{ $v.IP }}
+{{ range $index, $v := .rabbitmq.Hosts.self -}}
+{{ $delta := 1 }}
+{{ $v.IP }} role=node{{ $index }}
 {{ end }}

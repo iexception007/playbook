@@ -1,0 +1,40 @@
+- name: install rabbitmq cluster
+  hosts: all
+  user: root
+  vars:
+    path: /var/tmp/wise2c/rabbitmq
+    data_path: /data/lib/wise2c/rabbitmq/data
+    image: rabbitmq:3.7.2-management
+  tasks:
+  - name: make rabbitmq dir
+    file:
+      path: '{{ item }}'
+      state: directory
+      mode: 0755
+    with_items:
+      - '{{ path }}'
+      - '{{ data_path}}'
+
+  - name: copy rabbitmq image
+    copy:
+      src: '{{ item.src }}'
+      dest: '{{ item.dest }}'
+    with_items:
+      - { src: 'file/rabbitmq.tar.bz2', dest: '{{ path }}' } 
+
+  - name: load rabbitmq image
+    docker_image:
+      load_path: '{{ path }}/rabbitmq.tar.bz2'
+      name: '{{ image }}'
+      timeout: 600
+
+
+  - name: setup master
+    include_tasks: master.ansible
+    when: "'rabbitmq-master' in group_names"
+            
+  - name: setup slave
+    include_tasks: slave.ansible
+    when: "'rabbitmq-slave' in group_names"            
+
+    

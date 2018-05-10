@@ -1,0 +1,11 @@
+- name: install rabbitmq container
+  docker_container:
+    name: rabbitmq
+    image: '{{ image }}'            
+    volumes:
+    - /etc/hosts:/etc/hosts
+    - "{{ cfg_path }}/rabbitmq.conf:/etc/rabbitmq/rabbitmq.conf"
+    env:
+      RABBITMQ_ERLANG_COOKIE: "LfSlzQHvlvQGZqpbM46DAg=="
+      RABBITMQ_NODENAME: "rabbit@{{ ansible_hostname }}"
+    network_mode: host  

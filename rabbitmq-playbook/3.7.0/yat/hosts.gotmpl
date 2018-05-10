@@ -1,0 +1,9 @@
+[rabbitmq-master]
+{{ range $v := .rabbitmq.Hosts.master -}}
+{{ $v.IP }}
+{{ end }}
+
+[rabbitmq-slave]
+{{ range $v := .rabbitmq.Hosts.slave -}}
+{{ $v.IP }}
+{{ end }}

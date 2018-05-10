@@ -8,11 +8,11 @@
         "required": true
     },
     {
-        "variable": "port",
-        "label": "rabbitmq port",
-        "description": "access the rabbitmq ui with this port",
-        "type": "string",
-        "default": "15672",
+        "variable": "cluster_mirror",
+        "label": "rabbitmq cluster mirror",
+        "description": "rabbitmq cluster mirror function",
+        "type": "bool",
+        "default": true,
         "required": true
     }
 ]
