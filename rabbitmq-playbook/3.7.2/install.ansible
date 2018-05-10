@@ -56,8 +56,11 @@
   #   when: role == 'node2'
 
   - name: check the cluster status
-    script: scripts/check_rabbitmq.sh 10
+    script: scripts/check_rabbitmq.sh 7
     register: check_output 
+
+#  - debug:
+#      msg: "check_out={{ check_output.stdout }}"
 
   - name: set rabbitmq mirror function
     script: scripts/mirror_rabbitmq.sh
