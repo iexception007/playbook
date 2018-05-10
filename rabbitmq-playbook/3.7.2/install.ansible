@@ -38,18 +38,10 @@
 
   - name: wait some sec for the order
     shell: |
-      # if [[ {{ ansible_hostname }} == "dev-1" ]]; then
-      #   sleep 0
-      # elif [[ {{ ansible_hostname }} == "dev-2" ]]; then
-      #   sleep 2
-      # elif [[ {{ ansible_hostname }} == "dev-3" ]]; then
-      #   sleep 4
-      # fi
       {% for host in groups['all'] %}{% if host == inventory_hostname %}  sleep {{ loop.index0 * 2 }}  {% endif %}{% endfor %}
 
   - name: run rabbitmq container
     include_tasks: instance.ansible
-
 
   # - name: run node1 rabbitmq container
   #   include_tasks: instance.ansible
@@ -64,7 +56,7 @@
   #   when: role == 'node2'
 
   - name: check the cluster status
-    script: scripts/check_rabbitmq.sh 7
+    script: scripts/check_rabbitmq.sh 10
     register: check_output 
 
   - name: set rabbitmq mirror function
