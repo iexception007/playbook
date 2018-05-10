@@ -36,24 +36,24 @@
     - { src: 'template/start_order.sh.j2', dest: '{{ cfg_path }}/start_order.sh' }
     - { src: 'template/rabbitmq.conf.j2', dest: '{{ cfg_path }}/rabbitmq.conf' }
 
-  - name: wait some sec for the order
-    shell: |
-      {% for host in groups['all'] %}{% if host == inventory_hostname %}  sleep {{ loop.index0 * 2 }}  {% endif %}{% endfor %}
+  # - name: wait some sec for the order
+  #   shell: |
+  #     {% for host in groups['all'] %}{% if host == inventory_hostname %}  sleep {{ loop.index0 * 2 }}  {% endif %}{% endfor %}
 
-  - name: run rabbitmq container
+  # - name: run rabbitmq container
+  #   include_tasks: instance.ansible
+
+  - name: run node1 rabbitmq container
     include_tasks: instance.ansible
+    when: role == 'node0'
 
-  # - name: run node1 rabbitmq container
-  #   include_tasks: instance.ansible
-  #   when: role == 'node0'
-
-  # - name: run node2 rabbitmq container
-  #   include_tasks: instance.ansible
-  #   when: role == 'node1'
+  - name: run node2 rabbitmq container
+    include_tasks: instance.ansible
+    when: role == 'node1'
  
-  # - name: run node3 rabbitmq container
-  #   include_tasks: instance.ansible
-  #   when: role == 'node2'
+  - name: run node3 rabbitmq container
+    include_tasks: instance.ansible
+    when: role == 'node2'
 
   - name: check the cluster status
     script: scripts/check_rabbitmq.sh 7
